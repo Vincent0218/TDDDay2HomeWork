@@ -18,15 +18,22 @@ namespace ShoppingCart
 
         public decimal CalAmount()
         {
-            decimal totalAmount = 0m;
+            decimal totalAmount = Cart.Sum(p => p.Price);
+            decimal discountPercent = 1m;
 
-
-            foreach (var item in Cart)
+            switch (Cart.Count)
             {
-                totalAmount = +item.Price;
+                case 1:
+                    discountPercent = 1m;
+                    break;
+                case 2:
+                    discountPercent = 0.95m;
+                    break;
+                default:
+                    break;
             }
 
-            return totalAmount;
+            return totalAmount * discountPercent;
         }
     }
 }
