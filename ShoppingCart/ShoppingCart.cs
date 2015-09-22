@@ -18,10 +18,41 @@ namespace ShoppingCart
 
         public decimal CalAmount()
         {
-            decimal totalAmount = Cart.Sum(p => p.Price);
+
+            IList<Dictionary<int, ProductModel>> set = new List<Dictionary<int, ProductModel>>();
+            set.Add(new Dictionary<int, ProductModel>());
+            foreach (var item in Cart)
+            {
+                bool isAddBagSet = false;
+                foreach (var bagSet in set)
+                {
+                    if (!bagSet.ContainsKey(item.ID))
+                    {
+                        bagSet.Add(item.ID, item);
+                        isAddBagSet = true;
+                        break;
+                    }
+                }
+
+                if (!isAddBagSet)
+                {
+                    var bagSet = new Dictionary<int, ProductModel>();
+                    set.Add(bagSet);
+                    bagSet.Add(item.ID, item);
+                }
+
+            }
+
+            return set.Sum(s => GetBagSetTotalAmount(s));
+
+        }
+
+        private decimal GetBagSetTotalAmount(Dictionary<int, ProductModel> basSet)
+        {
+            decimal totalAmount = basSet.Sum(p => p.Value.Price);
             decimal discountPercent = 1m;
 
-            switch (Cart.Count)
+            switch (basSet.Count)
             {
                 case 1:
                     discountPercent = 1m;
