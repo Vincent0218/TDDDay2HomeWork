@@ -29,6 +29,9 @@ namespace ShoppingCart
                 case 2:
                     discountPercent = 0.95m;
                     break;
+                case 3:
+                    discountPercent = 0.9m;
+                    break;
                 default:
                     break;
             }
